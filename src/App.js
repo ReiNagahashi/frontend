@@ -7,13 +7,7 @@ import Login from './views/auth/Login';
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Navbar/>
-        <Switch>
-           <Route path='/login' component={Login} exact />
-           <Route path='/signup' component={Signup} exact />
-        </Switch>
-      </Router>
+
     </div>
   );
 }
