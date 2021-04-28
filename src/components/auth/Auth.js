@@ -9,9 +9,7 @@ const Auth = (props) => {
             </div>
             <div className="login">
                 <Login
-                    handleLogin={props.handleLogin}
-                    username = {props.username}
-                    setUsername = {props.setUsername}
+                    setLogged_in = {props.setLogged_in}
                 />
             </div>
         </div>

@@ -1,31 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import React, { useEffect } from 'react';
 
-const Navbar = ({logged_in,setLogged_in,setUsername}) => {
-    const base_url = window.SERVER_ADDRESS;
-
+const Navbar = ({logged_in,setLogged_in,setUsername,setUser_id}) => {
     // check if user exists
+    const history = useHistory();
     useEffect(() => {
+      const base_url = window.SERVER_ADDRESS;
+
         const initializeUser = async() =>{
-            console.log(logged_in)
+          console.log("User was initialized")
           if(logged_in){
             try{
               const res = await fetch(`${base_url}/accounts/current_user/`,{
                 method:'GET',
-                headers:{
-                  Authorization:`JWT ${localStorage.getItem('token')}`
+                headers : {
+                  Authorization : `JWT ${localStorage.getItem('token')}`
                 }
               })
-              const data = await res.json()
-        
+              const data = await res.json()              
+              setUser_id(data.id)
               setUsername(data.username)
-              
-            }catch(err){console.log(err)};
+            }catch(err){
+              setLogged_in(false);
+              console.log(err)
+              history.push("/auth")
+            };
           }
-      
         }
         initializeUser();
-      }, [base_url,logged_in,setUsername])
+      }, [history,logged_in,setUsername,setUser_id,setLogged_in])
     
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -37,7 +40,9 @@ const Navbar = ({logged_in,setLogged_in,setUsername}) => {
     return ( 
         <div className="navBar">
             <Link to="/posts">投稿</Link>
+            <br/>
             <Link to="/problems">問題提起</Link>
+            <br/>
             <Link to="/">ホーム</Link>
             { logged_in? 
                 // ログイン

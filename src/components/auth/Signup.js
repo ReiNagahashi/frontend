@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios'
 import { useForm } from 'react-hook-form'
-
+ 
 const Signup = () => {
   // window properties
   const base_url = window.SERVER_ADDRESS;
