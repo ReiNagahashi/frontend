@@ -3,15 +3,16 @@ import Login from "./Login";
 
 const Auth = (props) => {
     return ( 
-        <div className="auth_forms">
+        <div className="flex justify-around">
             <div className="register">
                 <Signup/>
             </div>
-            <div className="login">
+            <div className="middle_position self-center">
+                OR
+            </div>
                 <Login
                     setLogged_in = {props.setLogged_in}
                 />
-            </div>
         </div>
      );
 }
