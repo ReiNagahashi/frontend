@@ -8,13 +8,13 @@ const Signup = () => {
   // Validation properties from RHF
   const { register,handleSubmit,formState:{errors} } = useForm();
   // States
-  const [username, setUsername] = useState(''),
+  const [email, setEmail] = useState(''),
         [password, setPassword] = useState(''),
         [password2, setPassword2] = useState(''),
         [signal,setSignal] = useState(false);
 
   const clearForm = () =>{
-    setUsername('');
+    setEmail('');
     setPassword('');
     setPassword2('');
   }
@@ -26,43 +26,45 @@ const Signup = () => {
       return;
     }
       try{
-        await Axios.post(base_url+'/accounts/users/create',{
+        await Axios.post(base_url+'/accounts/user/create',{
           'user':{
-            'username':username,
+            'email':email,
             'password':password
           }
         })
       }catch(err){
         console.log(err);
     }
-
+    alert("登録を完了しました。ログインをして様々な機能を使いましょう。")
     clearForm();
   }
   
   return ( 
       <div>
         {/*  "handleSubmit" will validate your inputs by RHF before invoking "onSubmit"  */}
+        <h1 className="text-2xl">登録</h1>
         <form onSubmit={handleSubmit(sendRegistration)} noValidate>
-          <div>
-            <label htmlFor="username">ユーザー名</label>
-            <input type="text" name="username" id="username" 
-            {...register("username",{ required:true })} value={username} onChange={e => setUsername(e.target.value)}/>
-            {errors.username && <span>入力必須項目です</span>}
+          <div className="my-6">
+            <div></div>
+            <label htmlFor="email" className="label">メールアドレス :</label>
+            <input type="email" name="email" id="email" className="form" placeholder="abc@gmail.com"
+            {...register("email",{ required:true })} value={email} onChange={e => setEmail(e.target.value)}/>
+            {errors.email && <span className="text-red-500">入力必須項目です</span>}
           </div>
-          <div>
-            <label htmlFor="password">パスワード</label>
-            <input type="password" name="password" id="password" 
+          <div className="my-6">
+            <label htmlFor="password" className="label">パスワード:</label>
+            <input type="password" name="password" id="password" className="form" placeholder="Password"
             {...register("password",{ required:true })} value={password} onChange={e => setPassword(e.target.value)}/>
-            {errors.password && <span>入力必須項目です</span>}
+            {errors.password && <span className="text-red-500">入力必須項目です</span>}
           </div>
-          <div>
-            <label htmlFor="password">再入力パスワード</label>
-            <input type="password" name="password2" id="password2" 
+          <div className="my-6">
+            <label htmlFor="password" className="label">再入力パスワード:</label>
+            <input type="password" name="password2" id="password2" className="form" placeholder="Password"
             {...register("password2",{ required:true })} value={password2} onChange={e => setPassword2(e.target.value)}/>
-            {errors.password2 && <span>入力必須項目です</span>}
-            {signal && <span>パスワードと一致しません。</span>}
+            {errors.password2 && <span className="text-red-500">入力必須項目です</span>}
+            {signal && <span className="text-red-500">パスワードと一致しません</span>}
           </div>
-          <button type="submit">登録</button>
+          <button type="submit" className="btn bg-green-300 mt-4">登録</button>
         </form>
       </div>
    );

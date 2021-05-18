@@ -6,7 +6,7 @@ import Axios from 'axios'
 const Login = ({setLogged_in}) => {
     const base_url = window.SERVER_ADDRESS;
     const history = useHistory()
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [userIsValid, setUserIsValid] = useState(true)  
 
@@ -16,14 +16,14 @@ const Login = ({setLogged_in}) => {
     const handleLogin = async() => {
 
         const data = {
-          username:username,
+          email:email,
           password:password
         }
 
         try{
           const msg = await Axios.post(base_url+'/accounts/check_user/',{
             'user':{
-              'username':username,
+              'email':email,
               'password':password
             }
           })
@@ -36,13 +36,14 @@ const Login = ({setLogged_in}) => {
       }
     
         try{
+          console.log(data)
           const res = await fetch(`${base_url}/token-auth/`,{
             crossDomain:true,
             withCredencials:true,
             async:true,
             method:'POST',
             headers:{
-              'Content-Type':'application/json'
+              'Content-Type':'application/json',
             },
             body:JSON.stringify(data)
           })
@@ -51,7 +52,7 @@ const Login = ({setLogged_in}) => {
           
           setLogged_in(true);
           setUserIsValid(true);
-          history.push('/');
+          history.push('/profile/create');
           
         }catch(err){
           console.log(err);
@@ -61,33 +62,42 @@ const Login = ({setLogged_in}) => {
     
     return ( 
       <div>
+        <h1 className="text-2xl">ログイン</h1>
         { userIsValid === false && <h3>ユーザー情報に誤りがあります</h3> }
-        <form onSubmit={handleSubmit(handleLogin)} >
-            {/* Username */}
-            <label htmlFor="username">Username</label>
-            <input
-                {...register("username",{ required:true })}
-                type="text"                
-                onChange={e => setUsername(e.target.value)}
-                value={username}
-                id="username"
-                placeholder="Username"
-            />
-            {errors.username && <span>入力必須項目です</span>}
-            
-            {/* Password */}
-            <label htmlFor="pass">Password</label>
-            <input
-                {...register("password",{ required:true })}
-                type="password"
-                onChange={e => setPassword(e.target.value)}
-                value={password}
-                id="pass"
-                placeholder="Password"
-            />
-            {errors.password && <span>入力必須項目です</span>}
+        <form onSubmit={handleSubmit(handleLogin)} className="h-full flex flex-col items-center justify-center">
+            {/* email */}
+            <div className="flex">
+              <div>
+                <label htmlFor="login_email" className="label">メールアドレス:</label>
+                <input
+                    {...register("login_email",{ required:true })}
+                    type="email"                
+                    onChange={e => setEmail(e.target.value)}
+                    value={email}
+                    id="login_email"
+                    className="form"
+                    placeholder="abc@gmail.com"
+                />
+                {errors.login_email && <div className="text-red-500">入力必須項目です</div>}
+              </div>
+              
+              {/* Password */}
+              <div className="ml-5">
+                <label htmlFor="login_pass" className="label">パスワード:</label>
+                <input
+                    {...register("login_password",{ required:true })}
+                    type="password"
+                    onChange={e => setPassword(e.target.value)}
+                    value={password}
+                    id="login_pass"
+                    className="form"
+                    placeholder="Password"
+                />
+                {errors.login_password && <div className="text-red-500">入力必須項目です</div>}
+              </div>
+            </div>
 
-            <button type="submit">Login</button>
+            <button type="submit" className="btn bg-green-500 mt-10">ログイン</button>
         </form>
       </div>
      );
