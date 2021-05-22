@@ -5,13 +5,13 @@
 @tailwind utilities;
 
 .form{
-    @apply border border-gray-400 rounded outline-none;
+    @apply border border-gray-400 rounded focus:outline-none;
   }
 .label{
   @apply text-xs block mb-4;
 }
 .btn{
-  @apply text-white p-2 w-24 rounded-3xl; 
+  @apply text-white p-2 rounded-3xl focus:outline-none; 
 }
 .file{
   @apply bg-gray-400 text-white rounded-lg shadow-md cursor-pointer;

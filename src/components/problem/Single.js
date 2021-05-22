@@ -1,6 +1,8 @@
 import FetchData from "../../fetch/fetchData";
 import { useParams,Link } from "react-router-dom";
-import Problems from "./Problems";
+// import React, { useEffect } from 'react';
+import LikeBtn from "../layout/LikeBtn";
+
 
 const Single = (props) => {
     const {id} = useParams();     
@@ -40,7 +42,7 @@ const Single = (props) => {
                     <img src={problem.thumb} alt="thumb" className="mt-24 mb-12 h-96 object-cover"/>
                     <p className="text-lg text-left">{problem.description}</p>
                 </div>
-                
+                <LikeBtn data={props.problems} setData={props.setProblems} singleData={problem} user={props.user}/>
             </div>
             )}
             { err && (<div className="error">

@@ -84,14 +84,16 @@ function App() {
                 {/* Problems */}
                 <Route path="/problems">
                   <Problems
-                    logged_in={logged_in}
+                    logged_in={logged_in}                  
                   />
                 </Route>
                 <Route path="/problem/edit/:id">
                   <Edit/>
                 </Route>
                 <Route path="/problem/:id">
-                  <Single user = {user}/>
+                  <Single
+                  user = {user}
+                  />
                 </Route>                
                 {/* Auth */}
                 <Route path="/auth">
