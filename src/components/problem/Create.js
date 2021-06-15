@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 const Create = ({problems,setProblems,setFlag,flag}) => {
     
@@ -7,7 +7,19 @@ const Create = ({problems,setProblems,setFlag,flag}) => {
     const [description, setDescription] = useState('');
     const [thumb, setThumb] = useState('');
     const [video, setVideo] = useState('');
+    const [preview, setPreview] = useState('')
 
+    useEffect(() => {
+        if(thumb){
+            const reader = new FileReader();
+            reader.onloadend = () =>{
+                setPreview(reader.result)  
+            } 
+            reader.readAsDataURL(thumb);
+        }else{
+            setPreview("");
+        }
+    }, [thumb])
     const createProblem = async(e) => {
         e.preventDefault();
 
@@ -26,9 +38,13 @@ const Create = ({problems,setProblems,setFlag,flag}) => {
                 body:formData
             })
             const data = await res.json();
-            // data = {...data,author:[author]}
             setProblems([...problems,data]);
-            setFlag(!flag)            
+            setFlag(!flag)
+            setTitle('')            
+            setDescription('')
+            setThumb('')
+            setVideo('')
+            setPreview('')
         }catch(err){
             console.log(err);
         }  
@@ -43,14 +59,21 @@ const Create = ({problems,setProblems,setFlag,flag}) => {
                 <div className="my-8 flex justify-between mx-20">
                     <label className="file p-2" htmlFor="thumb">
                         <span>画像を選択</span>
-                        <input type="file" id="thumb" name="thumb" className="hidden" accept="image/png,image/jpeg" onChange={e => setThumb(e.target.files[0])}/>                
-                    </label>
+                        <input type="file" id="thumb" name="thumb" className="hidden" accept="image/png,image/jpeg" onChange={e => setThumb(e.target.files[0])}/>                                                              
+                    </label>                    
                     <label className="file p-2" htmlFor="video">
                         <span>動画を選択(任意)</span>
                         <input type="file" id="video" name="video" className="hidden" accept="video/*" onChange={e => setVideo(e.target.files[0])}/>                
                     </label>
-                    <button className="btn bg-green-300">投稿</button>
+                    <button className="btn bg-green-300 w-20 hoverDark">投稿</button>
                 </div>
+                    { preview ?(
+                        <div>
+                            <p>選択中:</p>
+                            <img src={preview} alt="preview"/>
+                        </div>) : ( 
+                        <div>画像が選択されていません。</div> 
+                    )}
             </form>
         </div>
      ); 

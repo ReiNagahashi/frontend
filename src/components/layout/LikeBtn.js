@@ -21,8 +21,8 @@ const LikeBtn = ({singleData,user}) => {
     return ( 
         <div>
             {  isLiked? 
-                (<button className="btn w-36 text-lg bg-gray-400" onClick={saveProblem}>取り消し<span>|{element.likes.length}|</span></button>):
-                (<button className="btn w-36 text-lg bg-pink-400" onClick={saveProblem}>保存する<span>|{element.likes.length}|</span></button>)  
+                (<button className="btn w-36 text-lg bg-gray-400 my-5" onClick={saveProblem}>取り消し<span>|{element.likes.length}|</span></button>):
+                (<button className="btn w-36 text-lg bg-pink-400 my-5" onClick={saveProblem}>保存する<span>|{element.likes.length}|</span></button>)  
             }
         </div>
      );

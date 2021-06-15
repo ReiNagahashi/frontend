@@ -42,6 +42,7 @@ const Single = (props) => {
                     <img src={problem.thumb} alt="thumb" className="mt-24 mb-12 h-96 object-cover"/>
                     <p className="text-lg text-left">{problem.description}</p>
                 </div>
+                {/* Like Button */}
                 <LikeBtn data={props.problems} setData={props.setProblems} singleData={problem} user={props.user}/>
             </div>
             )}

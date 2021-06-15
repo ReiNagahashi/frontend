@@ -43,7 +43,7 @@ const Signup = () => {
       <div>
         {/*  "handleSubmit" will validate your inputs by RHF before invoking "onSubmit"  */}
         <h1 className="text-2xl">登録</h1>
-        <form onSubmit={handleSubmit(sendRegistration)} noValidate>
+        <form onSubmit={handleSubmit(sendRegistration)}>
           <div className="my-6">
             <div></div>
             <label htmlFor="email" className="label">メールアドレス :</label>
@@ -64,7 +64,7 @@ const Signup = () => {
             {errors.password2 && <span className="text-red-500">入力必須項目です</span>}
             {signal && <span className="text-red-500">パスワードと一致しません</span>}
           </div>
-          <button type="submit" className="btn bg-green-300 mt-4">登録</button>
+          <button type="submit" className="btn w-20 bg-green-300 mt-4 hoverDark">登録</button>
         </form>
       </div>
    );
