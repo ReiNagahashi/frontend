@@ -105,7 +105,7 @@ function App() {
                   <Form user = {user}/>
                 </Route>
                 <Route path="/profile/:id">                  
-                  {logged_in ? user.fullname ? <Profile authUser={user}/> :  <Redirect to="/profile/create"/> : <Redirect to="/auth"/>}
+                  {logged_in ? <Profile authUser={user}/> : <Redirect to="/auth"/>}
                 </Route>
               </Switch>
           </div>

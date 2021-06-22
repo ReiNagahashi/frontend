@@ -1,15 +1,38 @@
-import { useState } from "react";
-import { Link,useParams } from "react-router-dom";
+import { useState,useEffect } from "react";
+import { Link,useParams,useHistory } from "react-router-dom";
 import FetchData from "../../fetch/fetchData";
+import Follow from "../../methods/follow";
 import Modal from "../layout/Modal";
 
 const Profile = ({authUser}) => {
-    const base_url = window.SERVER_ADDRESS;
     const {id} = useParams();
+    const history = useHistory()
     //fetch user data
-    const [init, setInit] = useState(true)
     const {data:user,error,loading} = FetchData(`accounts/${id}`);
+    const [init, setInit] = useState(true)
     const [modalToggle, setModalToggle] = useState(false)   ; 
+    
+    const [isFollowed, setIsFollowed] = useState(false)
+    const [followingsCnt, setFollowingsCnt] = useState(0)
+    const [followersCnt, setFollowersCnt] = useState(0)
+
+    // Initialize follow status
+    useEffect(() => {
+        try{            
+            if(user.user.id === authUser.id && !authUser.fullname) history.push('/profile/create');
+            
+            user.user.followers.length?                
+                setIsFollowed(user.user.followers.find(follower => follower.user_id === authUser.id) !== undefined)              
+                :
+                setIsFollowed(false)
+            
+            setFollowersCnt(user.user.followers.length);
+            setFollowingsCnt(user.user.following.length);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }, [user,authUser,modalToggle])
 
     // Open modal
     const openModal = (msg) => {
@@ -17,11 +40,11 @@ const Profile = ({authUser}) => {
         setModalToggle(true);
     }
     //  Follow the user
-    // const follow = (params) => {
-    //     fetch(`${base_url}/accounts/user/follow/`,{
-
-    //     })
-    // }
+    const followOrUnfollow = async(param) => {        
+        Follow(param,id);      
+        setIsFollowed(!isFollowed);
+        setFollowersCnt(followersCnt+(param === "follow" ? 1 : -1));
+    }
     return (        
         <div className="profile">
             { error && <span>読み込みに失敗しました😢</span> }
@@ -32,21 +55,22 @@ const Profile = ({authUser}) => {
                     <div className="flex flex-col items-center">
                         {/* User information */}                        
                         <img src={`http://127.0.0.1:8000${user.user.avatar}`} className="w-40 rounded" alt="avatar"/>
-                        <h4 className="text-xl my-4">氏名：{user.user.fullname}</h4>
-                        <div>
-                            <span onClick={() => openModal("follow") } className="cursor-pointer">フォロー: {user.user.following.length}</span> 
-                            <span className="h-10 mx-4 border border-gray-700"></span>
-                            <span onClick={() => openModal("follower") } className="cursor-pointer">フォロワー: {user.user.followers.length}</span>
+                        <div className="flex items-center my-8">
+                            <h4 className="text-xl">氏名：{user.user.fullname}</h4>
+                            { user.user.id !== authUser.id && (
+                                <div className="ml-2">
+                                    { isFollowed?
+                                        <button onClick={() => followOrUnfollow("unfollow") } className="btn bg-gray-500 text-sm">解除</button> :<button onClick={() => followOrUnfollow("follow") } className="btn bg-green-600 text-sm mx-auto">フォロー</button>    
+                                    }                                    
+                                </div>                            
+                            ) }
                         </div>
-                        <p>Eメール：{user.user.email}</p>
-                        {/* { user.user.id !== authUser.id && (
-                            <div>
-                                { user.user.followers.find(follower => follower.id === authUser.id)?
-                                    <button onClick={() => follow("unfollow") }>解除</button> :<button onClick={() => follow("follow") }>フォロー</button>    
-                                }
-                                
-                            </div>                            
-                        ) } */}
+                        <div className="border-r border-b border-gray-500 p-2 shadow-lg">
+                            <span onClick={() => openModal("follow") } className="cursor-pointer">フォロー: {followingsCnt}</span> 
+                            <span className="h-10 mx-4 border border-gray-700"></span>
+                            <span onClick={() => openModal("follower") } className="cursor-pointer">フォロワー: {followersCnt}</span>
+                        </div>
+                        <p className="my-5">Eメール：{user.user.email}</p>
                         <p>{user.user.introduction}</p>            
                     </div>
                     <div className="py-24">
